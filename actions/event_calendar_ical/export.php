@@ -101,12 +101,18 @@ foreach($events as $event){
 	$vevent->setProperty('summary', $event->title);
 	$description = (isset($event->description) && $event->description != "") ? $event->description : null;
 	
-	if (!$description  && $event->long_description) {
+	if (!$description && $event->long_description) {
 		$description = $event->long_description;
 	}
 	
 	$vevent->setProperty('description', $description);
 	$vevent->setProperty('organizer', $event->getOwnerEntity()->email, array('CN' => $event->organiser));
+	$vevent->setProperty( "X-PROP-REGION", $event->region );
+	$vevent->setProperty( "X-PROP-TYPE", $event->event_type );
+	$vevent->setProperty( "X-PROP-FEES", $event->fees );
+	$vevent->setProperty( "X-PROP-TAGS", implode(',' , $event->tags) );
+	$vevent->setProperty( "X-PROP-CONTACT", $event->contact );
+	$vevent->setProperty( "X-PROP-LONG-DESC", $event->long_description);
 		
 }
 

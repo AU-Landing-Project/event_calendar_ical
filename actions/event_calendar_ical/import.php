@@ -60,6 +60,8 @@ while ($vevent = $v->getComponent()) {
 	$fees = $vevent->getProperty( 'X-PROP-FEES' );
 	$event_type = $vevent->getProperty( 'X-PROP-TYPE' );
 	$tags = $vevent->getProperty( 'X-PROP-TAGS' );
+	$contact = $vevent->getProperty( 'X-PROP-CONTACT' );
+	$long_description = $vevent->getProperty( 'X-PROP-LONG-DESC' );
 	
 	set_input('event_action', 'add_event');
 	set_input('event_id', 0);
@@ -72,10 +74,10 @@ while ($vevent = $v->getComponent()) {
 	set_input('venue',$venue);
 	  
 	if ($event_calendar_times == 'yes') {
-	  set_input('start_time_h',$dtstart['hour']);
-	  set_input('start_time_m',$dtstart['min']);
-	  set_input('end_time_h',$dtend['hour']);
-	  set_input('end_time_m',$dtend['min']);
+	  set_input('start_time_hour',$dtstart['hour']);
+	  set_input('start_time_minute',$dtstart['min']);
+	  set_input('end_time_hour',$dtend['hour']);
+	  set_input('end_time_minute',$dtend['min']);
 	}
 	
 	$strdate = date('Y-m-d', mktime(0,0,0,$dtstart['month'],$dtstart['day'],$dtstart['year']));
@@ -87,19 +89,18 @@ while ($vevent = $v->getComponent()) {
 	set_input('brief_description',$description);
 					
 	if ($event_calendar_region_display == 'yes') {
-	  set_input('region',$region);
+	  set_input('region',$region[1]);
 	}
 					
 	if ($event_calendar_type_display == 'yes') {
-	  set_input('event_type',$event_type);
+	  set_input('event_type',$event_type[1]);
 	}
-					
-	set_input('fees',$fees);
-	set_input('contact',$contact);
+
+	set_input('fees',$fees[1]);
+	set_input('contact',$contact[1]);
 	set_input('organiser', $organiser['params']['CN']);
-	set_input('tags',$tags);
-	set_input('long_description',$long_description);
-	
+	set_input('tags',  $tags[1]);
+	set_input('long_description',$long_description[1]);
 	$result = event_calendar_set_event_from_form(0, $container_guid);
 	
 	if ($result) {
