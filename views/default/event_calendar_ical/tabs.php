@@ -1,13 +1,14 @@
 <?php
 
-$type = get_input('type', 'personal');
-$group_guid = (int) get_input('group_guid', false);
-$date = get_input('date', date('Y-n-j'));
-$interval = get_input('interval', 'month');
 
-$urlmod = "?method=ical&type={$type}&date={$date}&interval={$interval}";
-if ($type == 'group' && $group_guid !== false) {
-  $urlmod .= "&group_guid={$group_guid}";
+$urlmod = "?method=ical&filter={$vars['filter']}&date={$vars['date']}&interval={$vars['interval']}";
+
+if ($vars['group_guid']) {
+  $urlmod .= "&group_guid={$vars['group_guid']}";
+}
+
+if ($vars['region']) {
+  $urlmod .= "&region={$vars['region']}";
 }
 
 echo elgg_view('navigation/tabs', array(
