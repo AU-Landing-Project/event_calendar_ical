@@ -18,6 +18,7 @@ function ec_ical_init() {
   elgg_register_action('event_calendar_ical/export', elgg_get_plugins_path() . "event_calendar_ical/actions/event_calendar_ical/export.php");
   
   elgg_register_plugin_hook_handler('register', 'menu:extras', 'ec_ical_extras_menu');
+  elgg_register_plugin_hook_handler('register', 'menu:entity', 'ec_ical_entity_menu');
   elgg_register_plugin_hook_handler('route', 'event_calendar', 'ec_ical_event_calendar_router');
 }
 

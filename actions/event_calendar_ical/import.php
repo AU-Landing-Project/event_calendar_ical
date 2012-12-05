@@ -47,7 +47,7 @@ elgg_set_plugin_setting('more_required', 'no', 'event_calendar');
 $created = array(); // an array to hold all of the created events
 while ($vevent = $v->getComponent()) {
   if ($vevent instanceof vevent) {
-	$dtstart = $vevent->getProperty('dtstart');
+	$dtstart = $vevent->getProperty('dtstart'); var_dump($dtstart);
 	$dtend = $vevent->getProperty('dtend');
 	$summary = $vevent->getProperty('summary');
 	$description = $vevent->getProperty('description');
@@ -55,13 +55,17 @@ while ($vevent = $v->getComponent()) {
 	$venue = $vevent->getProperty('location') ? $vevent->getProperty('location') : "default";
 					
 	//cross plateform exchange
-	$region = $fees = $type = $tags = $long_description = "";
+	$region = $fees = $type = $tags = "";
 	$region = $vevent->getProperty( 'X-PROP-REGION' );
 	$fees = $vevent->getProperty( 'X-PROP-FEES' );
 	$event_type = $vevent->getProperty( 'X-PROP-TYPE' );
 	$tags = $vevent->getProperty( 'X-PROP-TAGS' );
 	$contact = $vevent->getProperty( 'X-PROP-CONTACT' );
 	$long_description = $vevent->getProperty( 'X-PROP-LONG-DESC' );
+	
+	if (empty($long_description)) {
+	  $long_description = array(1 => $description);
+	}
 	
 	set_input('event_action', 'add_event');
 	set_input('event_id', 0);

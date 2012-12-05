@@ -50,6 +50,22 @@ function ec_ical_event_calendar_router($hook, $type, $return, $params) {
   }
 }
 
+function ec_ical_entity_menu($hook, $type, $return, $params) {
+  if (elgg_instanceof($params['entity'], 'object', 'event_calendar')) {
+	$url = elgg_get_site_url() . 'action/event_calendar_ical/export?filter=' . $params['entity']->getGUID();
+	
+	$item = new ElggMenuItem(
+			'ical_export',
+			elgg_view('output/img', array('src' => elgg_get_site_url() . 'mod/event_calendar/images/ics.png')),
+			elgg_add_action_tokens_to_url($url)
+			);
+	$item->setPriority(1000);
+	
+	$return[] = $item;
+	return $return;
+  }
+}
+
 /**
  * replace ical extras link with our own
  */

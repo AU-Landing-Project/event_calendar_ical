@@ -24,8 +24,15 @@ switch ($filter) {
   case 'site':
 	$container_guid = 0;
   case 'all':
-  default:
 	$events = event_calendar_get_events_between($start_ts,$end_ts,false,0,0,$container_guid, $region);
+	break;
+  default:
+	// see if we're exporting just a single event
+	$events = false;
+	$event = get_entity($filter);
+	if (elgg_instanceof($event, 'object', 'event_calendar')) {
+	  $events = array(array('event' => $event));
+	}
 	break;
 }
 
