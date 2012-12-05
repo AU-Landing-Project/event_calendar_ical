@@ -23,4 +23,17 @@
 		<plugin>event_calendar</plugin>
 		<priority>after</priority>
 	</requires>
+
+	<screenshot>
+		<path>images/screenshot1.png</path>
+	</screenshot>
+	<screenshot>
+		<path>images/screenshot2.png</path>
+	</screenshot>
+	<screenshot>
+		<path>images/screenshot3.png</path>
+	</screenshot>
+	<screenshot>
+		<path>images/screenshot4.png</path>
+	</screenshot>
 </plugin_manifest>
