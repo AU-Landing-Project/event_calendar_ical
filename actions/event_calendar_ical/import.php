@@ -54,7 +54,7 @@ elgg_set_plugin_setting('more_required', 'no', 'event_calendar');
 $created = array(); // an array to hold all of the created events
 while ($vevent = $v->getComponent()) {
   if ($vevent instanceof vevent) {
-	$dtstart = $vevent->getProperty('dtstart'); var_dump($dtstart);
+	$dtstart = $vevent->getProperty('dtstart');
 	$dtend = $vevent->getProperty('dtend');
 	$summary = $vevent->getProperty('summary');
 	$description = $vevent->getProperty('description');
