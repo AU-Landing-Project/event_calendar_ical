@@ -2,5 +2,8 @@
 
 x.x (mm/dd/yyyy):
 
+1.1 (01/02/2013):
+ - fixes bug with invalid import if user hasn't created any files in dataroot yet
+
 1.0 (12/05/2012):
  - initial release

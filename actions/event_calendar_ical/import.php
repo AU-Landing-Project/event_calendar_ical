@@ -20,9 +20,16 @@ if (empty($_FILES['ical_file']['name'])) {
 $thumb = new ElggFile();
 $thumb->setMimeType($_FILES['ical_file']['type']);
 $thumb->setFilename($_FILES['ical_file']['name']);
+$thumb->open('write');
+$thumb->close();
 
 // copy the file
-move_uploaded_file($_FILES['ical_file']['tmp_name'], $thumb->getFilenameOnFilestore());
+$moved = move_uploaded_file($_FILES['ical_file']['tmp_name'], $thumb->getFilenameOnFilestore());
+
+if (!$moved) {
+  register_error(elgg_echo('event_calendar_ical:file:cannotload'));
+  forward(REFERER);
+}
 
 $path = pathinfo($thumb->getFilenameOnFilestore());
 
