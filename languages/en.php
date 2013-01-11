@@ -1,7 +1,8 @@
 <?php
 
 $english = array(
-	'event_calendar_ical:timezone' => "Chose your timezone",
+	'event_calendar_ical:timezone' => "Import using which timezone?",
+	'event_calendar_ical:timezone:help' => "Depending on the timezone of the server that exported the data the listed dates/times may be off if different from the timezone of this server.  If in doubt, leave it as the default which is this servers timezone.",
 	'event_calendar_ical:tooltip' => "Export/Import to iCal",
 	'event_calendar_ical:export' => "Export",
 	'event_calendar_ical:import' => "Import",

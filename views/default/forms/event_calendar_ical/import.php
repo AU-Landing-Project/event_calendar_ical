@@ -40,6 +40,28 @@ echo elgg_view('input/file', array('name' => 'ical_file'));
 
 echo '<br><br>';
 
+echo elgg_echo('event_calendar_ical:timezone') . '<br>';
+echo '<select name="timezone">';
+$timezone_identifiers = DateTimeZone::listIdentifiers();
+    foreach( $timezone_identifiers as $value ){
+        if ( preg_match( '/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $value ) ){
+            $ex = explode("/", $value);//obtain continent,city
+            if ($continent != $ex[0]){
+                if ($continent!="") echo '</optgroup>';
+                echo '<optgroup label="'.$ex[0].'">';
+            }
+    
+			$continent = array_shift($ex);
+            $city = implode('/', $ex);
+            
+            echo '<option value="'.$value.'"'; if (date_default_timezone_get() == $value) echo " selected=\"yes\" "; echo ">".$city.'</option>';
+        }
+    }
+echo '</optgroup></select>';
+echo '<br>' . elgg_view('output/longtext', array('value' => elgg_echo('event_calendar_ical:timezone:help'), 'class' => 'elgg-subtext'));
+
+echo '<br><br>';
+
 echo elgg_echo('event_calendar_ical:import:access') . ' ';
 echo elgg_view('input/access', array('name' => 'access_id'));
 

@@ -4,6 +4,7 @@ elgg_load_library('elgg:event_calendar');
 elgg_load_library('event_calendar_ical:creator');
 
 $container_guid = (int) get_input('container_guid', 0);
+$import_timezone = get_input('timezone', date_default_timezone_get());
 
 // check if upload failed
 if (!empty($_FILES['ical_file']['name']) && $_FILES['ical_file']['error'] != 0) {
@@ -43,6 +44,12 @@ $config = array(
 $v = new vcalendar($config);
 $v->parse();
 
+$timezone_calendar = $v->getProperty('X-WR-TIMEZONE');
+$export_timezone = false;
+if ($timezone_calendar[1]) {
+  $export_timezone = $timezone_calendar[1];
+}
+
 $event_calendar_times = elgg_get_plugin_setting('times', 'event_calendar');
 $event_calendar_region_display = elgg_get_plugin_setting('region_display', 'event_calendar');
 $event_calendar_type_display = elgg_get_plugin_setting('type_display', 'event_calendar');
@@ -56,11 +63,44 @@ while ($vevent = $v->getComponent()) {
   if ($vevent instanceof vevent) {
 	$dtstart = $vevent->getProperty('dtstart');
 	$dtend = $vevent->getProperty('dtend');
+	
+	if (empty($dtstart['hour'])) {
+	  $dtstart['hour'] = 0;
+	}
+	
+	if (empty($dtstart['min'])) {
+	  $dtstart['min'] = 0;
+	}
+	
+	// if we don't have an export timezone, check for Z in tz
+	// @TODO - how do we handle offsets? why are there so many options for a standard?
+	if (!$export_timezone) {
+	  if ($dtstart['tz'] == 'Z' || $dtstart['tz'] == 'z') {
+		$export_timezone = 'UTC';
+	  }
+	}
+	
+	if (!$export_timezone) {
+	  // we can't determine any timezone, import it using the import timezone
+	  $export_timezone = $import_timezone;
+	}
+	
+	// get our timezone objects
+	$ExportTimeZone = new DateTimeZone($export_timezone);
+	$ImportTimeZone = new DateTimeZone($import_timezone);
+	
+	$starttime = new DateTime("{$dtstart['year']}-{$dtstart['month']}-{$dtstart['day']} {$dtstart['hour']}:{$dtstart['min']}:00", $ExportTimeZone);//new DateTime('2008-08-03 12:35:23');
+	$starttime->setTimezone($ImportTimeZone);
+	//echo $starttime->format('Y-m-d H:i:s');
+	
+	$endtime = new DateTime("{$dtend['year']}-{$dtend['month']}-{$dtend['day']} {$dtend['hour']}:{$dtend['min']}:00", $ExportTimeZone);//new DateTime('2008-08-03 12:35:23');
+	$endtime->setTimezone($ImportTimeZone);
+	
 	$summary = $vevent->getProperty('summary');
 	$description = $vevent->getProperty('description');
 	$organiser = $vevent->getProperty('organizer', false, true);
 	$venue = $vevent->getProperty('location') ? $vevent->getProperty('location') : "default";
-					
+	
 	//cross plateform exchange
 	$region = $fees = $type = $tags = "";
 	$region = $vevent->getProperty( 'X-PROP-REGION' );
@@ -70,7 +110,7 @@ while ($vevent = $v->getComponent()) {
 	$contact = $vevent->getProperty( 'X-PROP-CONTACT' );
 	$long_description = $vevent->getProperty( 'X-PROP-LONG-DESC' );
 	
-	if (empty($long_description)) {
+	if (empty($long_description[1])) {
 	  $long_description = array(1 => $description);
 	}
 	
@@ -85,16 +125,16 @@ while ($vevent = $v->getComponent()) {
 	set_input('venue',$venue);
 	  
 	if ($event_calendar_times == 'yes') {
-	  set_input('start_time_hour',$dtstart['hour']);
-	  set_input('start_time_minute',$dtstart['min']);
-	  set_input('end_time_hour',$dtend['hour']);
-	  set_input('end_time_minute',$dtend['min']);
+	  set_input('start_time_hour',$starttime->format('H'));
+	  set_input('start_time_minute',$starttime->format('i'));
+	  set_input('end_time_hour',$endtime->format('H'));
+	  set_input('end_time_minute',$endtime->format('i'));
 	}
 	
-	$strdate = date('Y-m-d', mktime(0,0,0,$dtstart['month'],$dtstart['day'],$dtstart['year']));
+	$strdate = $starttime->format('Y-m-d');
 	set_input('start_date',$strdate);					
 
-	$enddate = date('Y-m-d', mktime(0,0,0,$dtend['month'],$dtend['day'],$dtend['year']));
+	$enddate = $endtime->format('Y-m-d');
 	set_input('end_date',$enddate);
 	
 	set_input('brief_description',$description);

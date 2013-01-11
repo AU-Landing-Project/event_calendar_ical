@@ -2,6 +2,11 @@
 
 x.x (mm/dd/yyyy):
 
+1.2 ()
+ - fixes import of description if long description is empty
+ - adds import timezone override
+ - attempts to detect exported timezone and convert to local (or overridden timezone)
+
 1.1 (01/02/2013):
  - fixes bug with invalid import if user hasn't created any files in dataroot yet
 
