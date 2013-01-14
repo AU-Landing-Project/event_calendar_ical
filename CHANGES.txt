@@ -2,7 +2,10 @@
 
 x.x (mm/dd/yyyy):
 
-1.2 ()
+1.3 (01/14/2013):
+ - fixes wsod on import for events with and end date but no end time
+
+1.2 (01/11/2013):
  - fixes import of description if long description is empty
  - adds import timezone override
  - attempts to detect exported timezone and convert to local (or overridden timezone)

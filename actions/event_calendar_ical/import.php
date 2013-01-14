@@ -72,6 +72,14 @@ while ($vevent = $v->getComponent()) {
 	  $dtstart['min'] = 0;
 	}
 	
+	if ($dtend && empty($dtend['hour'])) {
+	  $dtend['hour'] = 0;
+	}
+	
+	if ($dtend && empty($dtend['min'])) {
+	  $dtend['min'] = 0;
+	}
+	
 	// if we don't have an export timezone, check for Z in tz
 	// @TODO - how do we handle offsets? why are there so many options for a standard?
 	if (!$export_timezone) {
