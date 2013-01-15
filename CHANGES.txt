@@ -6,6 +6,7 @@ x.x (mm/dd/yyyy):
  - fixes wsod on import for events with an end date but no end time
  - restores 'extras' menu ical link to feed url popup
  - adds import/export navigation as action buttons to title menu
+ - strips tags from event titles
 
 1.2 (01/11/2013):
  - fixes import of description if long description is empty

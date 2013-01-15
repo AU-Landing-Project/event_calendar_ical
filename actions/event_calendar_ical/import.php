@@ -129,7 +129,7 @@ while ($vevent = $v->getComponent()) {
 	  set_input('group_guid', $container_guid);
 	}
 	
-	set_input('title',$summary);
+	set_input('title', elgg_strip_tags($summary));
 	set_input('venue',$venue);
 	  
 	if ($event_calendar_times == 'yes') {
@@ -145,7 +145,7 @@ while ($vevent = $v->getComponent()) {
 	$enddate = $endtime->format('Y-m-d');
 	set_input('end_date',$enddate);
 	
-	set_input('brief_description',$description);
+	set_input('brief_description', nl2br($description));
 					
 	if ($event_calendar_region_display == 'yes') {
 	  set_input('region',$region[1]);
@@ -159,7 +159,7 @@ while ($vevent = $v->getComponent()) {
 	set_input('contact',$contact[1]);
 	set_input('organiser', $organiser['params']['CN']);
 	set_input('tags',  $tags[1]);
-	set_input('long_description',$long_description[1]);
+	set_input('long_description', nl2br($long_description[1]));
 	$result = event_calendar_set_event_from_form(0, $container_guid);
 	
 	if ($result) {
