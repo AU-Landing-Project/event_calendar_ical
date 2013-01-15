@@ -5,6 +5,8 @@
  * and reroute some things on event_calendar pagehandler
  */
 function ec_ical_event_calendar_router($hook, $type, $return, $params) {
+  set_input('ical_calendar_title_menu', true);
+  
   switch($return['segments'][0]) {
 	case 'list':
 	  if ($return['segments'][3] == 'mine') {
