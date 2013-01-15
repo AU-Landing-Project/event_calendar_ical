@@ -3,7 +3,7 @@
 x.x (mm/dd/yyyy):
 
 1.3 (01/14/2013):
- - fixes wsod on import for events with and end date but no end time
+ - fixes wsod on import for events with an end date but no end time
  - restores 'extras' menu ical link to feed url popup
  - adds import/export navigation as action buttons to title menu
 
